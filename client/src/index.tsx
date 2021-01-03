@@ -4,7 +4,7 @@ import ApolloClient from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { createHttpLink } from "apollo-link-http";
 import { ApolloProvider } from "react-apollo-hooks";
-import App from "./App";
+import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 
 const httpLink = createHttpLink({
