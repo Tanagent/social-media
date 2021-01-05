@@ -1,9 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import ApolloClient from "apollo-client";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { createHttpLink } from "apollo-link-http";
-import { ApolloProvider } from "react-apollo-hooks";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { ApolloProvider } from "@apollo/react-hooks";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 
