@@ -1,9 +1,9 @@
 import gql from "graphql-tag";
-import React, { useState } from "react";
-import { ApolloError, FetchResult, useMutation } from "@apollo/react-hooks";
+import React, { useContext, useState } from "react";
+import { ApolloError, useMutation } from "@apollo/react-hooks";
 import { Button, Form } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
-
+import { AuthContext } from "./context/auth";
 import { useForm } from "../utils/hooks";
 
 const REGISTER_USER = gql`
@@ -32,6 +32,7 @@ const REGISTER_USER = gql`
 
 function Register() {
 	let history = useHistory();
+	const context = useContext(AuthContext);
 	const [errors, setErrors] = useState<any>({});
 
 	const { onChange, onSubmit, values } = useForm(registerUser, {
@@ -42,8 +43,8 @@ function Register() {
 	});
 
 	const [addUser, { loading }] = useMutation(REGISTER_USER, {
-		update(_, result: FetchResult) {
-			console.log(result);
+		update(_, { data: { register: userData } }) {
+			context.login(userData);
 			history.push("/");
 		},
 		onError(err: ApolloError) {
