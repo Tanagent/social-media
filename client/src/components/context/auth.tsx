@@ -1,4 +1,26 @@
 import React, { createContext, useReducer } from "react";
+import jwtDecode from "jwt-decode";
+
+interface MyToken {
+	name: string;
+	exp: number;
+}
+
+const initialState = {
+	user: null
+};
+
+if (localStorage.getItem("jwtToken")) {
+	const decodedToken = jwtDecode<MyToken | any>(
+		localStorage.getItem("jwtToken") || ""
+	);
+
+	if (decodedToken.exp * 1000 < Date.now()) {
+		localStorage.removeItem("jwtToken");
+	} else {
+		initialState.user = decodedToken;
+	}
+}
 
 const AuthContext = createContext({
 	user: null,
@@ -24,9 +46,10 @@ function authReducer(state: any, action: any) {
 }
 
 function AuthProvider(props: any) {
-	const [state, dispatch] = useReducer(authReducer, { user: null });
+	const [state, dispatch] = useReducer(authReducer, initialState);
 
 	const login = (userData: any) => {
+		localStorage.setItem("jwtToken", userData.token);
 		dispatch({
 			type: "LOGIN",
 			payload: userData
@@ -34,6 +57,7 @@ function AuthProvider(props: any) {
 	};
 
 	const logout = () => {
+		localStorage.removeItem("jwtToken");
 		dispatch({ type: "LOGOUT" });
 	};
 
